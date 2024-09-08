@@ -1,0 +1,12 @@
+For Redis:
+sudo systemctl enable redis-server
+sudo systemctl start redis
+
+For celery:
+celery -A a_core worker -E -l info
+
+For Flower:
+celery -A a_core.celery_app flower
+
+for Bear:
+celery -A a_core  beat -l info --scheduler django_celery_beat.schedulers.DatabaseScheduler

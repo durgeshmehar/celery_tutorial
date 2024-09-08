@@ -1,0 +1,47 @@
+<header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
+    <div>
+        <a class="flex items-center gap-2" href="/">
+            <img class="h-6" src="/static/images/logo.svg" alt="Logo"/>
+            <span class="text-lg font-bold">Notify
+                {% if debug %}
+                    <span class="text-xs bg-red-500 text-white rounded-full px-2 py-1 italic">Dev</span>
+                {% endif %}
+            </span>
+        </a>
+    </div>
+    <nav class="block relative">
+        <ul class="navitems flex items-center justify-center h-full">
+            {% if request.user.is_authenticated %}
+            <li><a href="/">Home</a></li>
+            <li x-data="{ dropdownOpen: false }" class="relative">
+                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none flex items-center">
+                    <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/>
+                    {{ user.profile.name }}
+                    <img :class="dropdownOpen ? 'rotate-180 duration-300' : 'rotate-0 duration-300'" class="w-4 ml-2" src="https://img.icons8.com/small/32/ffffff/expand-arrow.png"/>
+                </a>
+                <div 
+                    x-show="dropdownOpen" 
+                    x-cloak 
+                    class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform scale-90 -translate-y-2"
+                    x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 transform scale-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 transform scale-90 -translate-y-2"
+                >
+                    <ul class="hoverlist space-y-2">
+                        <li><a href="{% url 'profile' %}">My Profile</a></li>
+                        <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
+                        <li><a href="{% url 'profile-settings' %}">Settings</a></li>
+                        <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+                    </ul>
+                </div>
+            </li>
+            {% else %}
+                <li><a href="{% url 'account_login' %}">Login</a></li>
+                <li><a href="{% url 'account_signup' %}?next={% url 'profile-onboarding' %}">Signup</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

@@ -1,0 +1,50 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+{% load socialaccount %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+
+{% block content %}
+    {% element h1 %}
+        {% trans "Sign In" %}
+    {% endelement %}
+    <p>
+        If you have not created an account yet, then please
+    <a href="{% url 'account_signup' %}?next={% url 'profile-onboarding' %}" class="text-blue-300">Sign Up</a> first.
+    </p>
+    {% url 'account_login' as login_url %}
+    {% element form form=form method="post" action=login_url tags="entrance,login" %}
+        {% slot body %}
+            {% csrf_token %}
+            {% element fields form=form unlabeled=True %}
+            {% endelement %}
+            {% if redirect_field_value %}
+                <input type="hidden"
+                       name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}" />
+            {% endif %}
+        {% endslot %}
+        {% slot actions %}
+            {% element button type="submit" tags="prominent,login" %}
+                {% trans "Sign In" %}
+            {% endelement %}
+        {% endslot %}
+        {% comment %} addede now {% endcomment %}
+
+        {% slot actions %}
+    <a href="{% provider_login_url 'google' %}" class="google-signin-button btn btn-social btn-google" style="display: inline-flex; align-items: center; background-color: #4285F4; color: white; padding: 10px 30px; border-radius: 5px; text-decoration: none; font-size: 18px; width: auto;">
+        <i class="fab fa-google fa-lg" style="color: white; margin-right: 10px;"></i>
+        <span style="flex-grow: 1;">{% trans "Sign In With Google" %}</span>
+    </a>
+{% endslot %}
+
+
+    {% endelement %}
+
+    {% comment %} {% if SOCIALACCOUNT_ENABLED %}
+        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %} {% endcomment %}
+
+{% endblock content %}
