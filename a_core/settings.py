@@ -21,9 +21,10 @@ if ENVIRONMENT == 'development':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'notify-o7iw.onrender.com',"message-board-production-e730.up.railway.app"]
-CSRF_TRUSTED_ORIGINS = [ 'https://notify-o7iw.onrender.com','https://message-board-production-e730.up.railway.app',
-    'https://*.railway.app']
+site_domain = env('RAILWAY_PUBLIC_DOMAIN', default='')
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'notify-o7iw.onrender.com',site_domain]
+CSRF_TRUSTED_ORIGINS = [ 'https://notify-o7iw.onrender.com',f'https://{site_domain}']
 INTERNAL_IPS = [
     "localhost:8000",'localhost', '127.0.0.1', '*'
 ]
