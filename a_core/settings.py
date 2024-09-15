@@ -119,10 +119,13 @@ if ENVIRONMENT == 'development':
     }
    }
 else:
-    import dj_database_url
-    DATABASES = {
-        'default': dj_database_url.parse(env('DATABASE_URL'))
-    }
+    try:
+        import dj_database_url
+        DATABASES = {
+            'default': dj_database_url.parse(env('DATABASE_URL'))
+        }
+    except ImportError:
+        print("dj_database_url not installed. Skipping production database configuration.")
 
 
 # Password validation
@@ -208,3 +211,8 @@ else:
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP= True
 CELERY_RESULT_EXTENDED = True
+
+
+
+print(f"Current environment: {ENVIRONMENT}")
+print(f"CELERY_BROKER_URL: {CELERY_BROKER_URL}")
