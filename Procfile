@@ -1,0 +1,1 @@
+web: celery -A a_core worker --loglevel=info & python manage.py migrate && gunicorn a_core.wsgi  --bind 0.0.0.0:$PORT
